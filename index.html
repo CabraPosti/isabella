@@ -26,9 +26,9 @@
     .envelope {
       width: 420px;
       min-height: 300px;
-      background: rgba(255, 182, 193, 0.9); /* Rosa pastel elegante */
+      background: rgba(255, 182, 193, 0.85); /* Rosa pastel */
       border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(255, 182, 193, 0.6);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -44,11 +44,10 @@
       left: 50%;
       transform: translate(-50%, 150%);
       width: 90%;
-      background: #ffe6eb;
-      color: #5a3d41;
+      background: white;
+      color: #222;
       padding: 25px 20px;
       border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 192, 203, 0.7);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -61,7 +60,7 @@
     }
     h1 {
       font-size: 1.8rem;
-      color: #d6336c;
+      color: #ff6b81;
       margin-bottom: 15px;
     }
     p {
@@ -74,7 +73,7 @@
       margin-top: 20px;
       font-style: italic;
       font-size: 1rem;
-      color: #7b4b52;
+      color: #444;
       text-align: right;
       width: 100%;
     }
@@ -90,6 +89,21 @@
     }
     @keyframes pulse { 0%,100%{opacity:0.9} 50%{opacity:0.4} }
     .envelope.open .tap-message { opacity: 0; pointer-events: none; }
+
+    .floating-name {
+      position: absolute;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      opacity: 1;
+      animation: floatUp 1.5s forwards;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-60px); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -189,6 +203,19 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+    });
+
+    // Evento para mostrar nombre donde se haga clic
+    document.body.addEventListener('click', (e) => {
+      if (e.target.closest('#envelope')) return; // no crear texto si clic en carta
+      const randomWord = words[Math.floor(Math.random()*words.length)];
+      const span = document.createElement('span');
+      span.className = 'floating-name';
+      span.innerText = randomWord;
+      span.style.left = `${e.clientX}px`;
+      span.style.top = `${e.clientY}px`;
+      document.body.appendChild(span);
+      setTimeout(() => span.remove(), 1500);
     });
   </script>
 </body>
